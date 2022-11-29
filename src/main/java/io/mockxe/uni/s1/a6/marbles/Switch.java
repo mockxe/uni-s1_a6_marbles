@@ -76,4 +76,21 @@ public class Switch {
         return ret;
     }
 
+
+    public Switch getSucc0() {
+        return succ0;
+    }
+
+    public Switch getSucc1() {
+        return succ1;
+    }
+
+    public void setSucc0(Switch succ0) {
+        this.succ0 = succ0;
+    }
+
+    public void setSucc1(Switch succ1) {
+        this.succ1 = succ1;
+    }
+
 }
