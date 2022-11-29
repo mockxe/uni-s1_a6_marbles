@@ -1,3 +1,5 @@
+package io.mockxe.uni.s1.a6.marbles;
+
 public class Switch {
 
     private Switch succ0;
