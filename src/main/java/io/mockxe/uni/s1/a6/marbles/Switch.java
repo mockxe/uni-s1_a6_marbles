@@ -67,13 +67,61 @@ public class Switch {
         }
 
 
-        Switch[] ret = new Switch[i];
+        return recursiveArrayCopy(src, i);
+    }
 
-        for (int j = 0; j < i; j++) {
-            ret[j] = src[j];
+    public int countSwitches() {
+        return successors(this).length;
+    }
+
+    private static Switch[] successors(Switch element) {
+        return successors(element, new Switch[] { element });
+    }
+
+    private static Switch[] successors(Switch element, Switch[] arr) {
+        for (Switch successor : element.directSuccessors()) {
+            if (!containsElement(successor, arr)) {
+                arr = addElement(successor, arr);
+                arr = successors(successor, arr);
+            }
         }
+        return arr;
+    }
+
+    private static Switch[] addElement(Switch element, Switch[] arr) {
+        Switch[] ret = recursiveArrayCopy(arr, arr.length + 1); // copy arr to ret
+        ret[ret.length - 1] = element; // add element in last position
 
         return ret;
+    }
+
+    public static boolean containsElement(Switch element, Switch[] arr) {
+        return containsElement(element, arr, 0);
+    }
+
+    private static boolean containsElement(Switch element, Switch[] arr, int i) {
+        if (i < arr.length ) {
+            if (element == arr[i]) {
+                return true; // return true if element is in arr
+            } else {
+                return containsElement(element, arr, i + 1); // check next element
+            }
+        } else {
+            return false; // return false if all elements were checked
+        }
+    }
+
+    public static Switch[] recursiveArrayCopy(Switch[] arr, int size) {
+        return recursiveArrayCopy(arr, new Switch[size], 0);
+    }
+
+    private static Switch[] recursiveArrayCopy(Switch[] src, Switch[] dest, int i) {
+        if (i < dest.length && i < src.length) {
+            dest[i] = src[i];
+            return recursiveArrayCopy(src, dest, i + 1);
+        } else {
+            return dest;
+        }
     }
 
 

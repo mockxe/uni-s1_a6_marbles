@@ -2,6 +2,8 @@ package io.mockxe.uni.s1.a6.marbles;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 class SwitchTest {
 
     @Test
@@ -139,6 +141,151 @@ class SwitchTest {
         assert sabarr[0] == a;
         assert sabarr[1] == b;
 
+    }
+
+    @Test
+    void testCountSwitchesStraight() {
+        // 1 (a)
+        Switch s1 = new Switch(null);
+        assert s1.countSwitches() == 1;
+    }
+
+    @Test
+    void testCountSwitchesSimple() {
+        // 1 (b)
+        Switch s4 = new Switch(null);
+        Switch s3 = new Switch(null, s4);
+        Switch s2 = new Switch(s3, s4);
+        assert s2.countSwitches() == 3;
+        assert s3.countSwitches() == 2;
+        assert s4.countSwitches() == 1;
+    }
+
+    @Test
+    void testCountSwitchesRecursion() {
+        // 1 (c)
+        Switch s9 = new Switch(null);
+        Switch s8 = new Switch(null, s9);
+        Switch s6 = new Switch(s8);
+        Switch s7 = new Switch(s6, s9);
+        Switch s5 = new Switch(s6, s7);
+        s8.setSucc0(s5);
+        assert s5.countSwitches() == 5;
+        assert s6.countSwitches() == 5;
+        assert s7.countSwitches() == 5;
+        assert s8.countSwitches() == 5;
+        assert s9.countSwitches() == 1;
+    }
+
+    @Test
+    void testRecursiveArrayCopySameSize() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] src = new Switch[]{s1, s2, s3, s4, s5};
+
+        Switch[] dest = Switch.recursiveArrayCopy(src, src.length);
+        for (int i = 0; i < src.length; i++) {
+            assert src[i] == dest[i];
+        }
+    }
+
+    @Test
+    void testRecursiveArrayCopyLargerDest() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] src = new Switch[]{s1, s2, s3, s4, s5};
+
+        Switch[] dest = Switch.recursiveArrayCopy(src, src.length + 2);
+        for (int i = 0; i < src.length; i++) {
+            assert src[i] == dest[i];
+        }
+        assert dest[dest.length - 2] == null; // 2nd last element should be null
+        assert dest[dest.length - 1] == null; // last element should be null
+    }
+
+    @Test
+    void testRecursiveArrayCopySmallerDest() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] src = new Switch[]{s1, s2, s3, s4, s5};
+
+        Switch[] dest = Switch.recursiveArrayCopy(src, src.length - 2);
+        for (int i = 0; i < src.length; i++) {
+            final int j = i;
+            if (i < 3) {
+                assert src[i] == dest[i]; // first three elements should match
+            } else {
+                assertThrows(ArrayIndexOutOfBoundsException.class, () -> {
+                    Switch sw = dest[j];
+                });
+            }
+        }
+    }
+
+    @Test
+    void testContainsElementFalse() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] arr = new Switch[]{s1, s2, s3, s4, s5};
+
+        Switch s6 = new Switch(null);
+
+        assert !Switch.containsElement(s6, arr);
+    }
+
+    @Test
+    void testContainsElementTrueFirst() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] arr = new Switch[]{s1, s2, s3, s4, s5};
+
+        assert Switch.containsElement(s1, arr);
+    }
+
+    @Test
+    void testContainsElementTrueLast() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] arr = new Switch[]{s1, s2, s3, s4, s5};
+
+        assert Switch.containsElement(s5, arr);
+    }
+
+    @Test
+    void testContainsElementTrueMiddle() {
+        Switch s1 = new Switch(null);
+        Switch s2 = new Switch(null);
+        Switch s3 = new Switch(null);
+        Switch s4 = new Switch(null);
+        Switch s5 = new Switch(null);
+
+        Switch[] arr = new Switch[]{s1, s2, s3, s4, s5};
+
+        assert Switch.containsElement(s3, arr);
     }
 
 }
