@@ -68,11 +68,9 @@ public class Switch {
      * @param succ2
      */
     public Switch(Switch succ0, Switch succ1, Switch succ2) {
-        this(
-                new Switch(succ0, succ2),
-                new Switch(succ1, null)
-        );
-        this.succ1.succ1 = this;
+        this.succ0 = new Switch(succ0, succ2);
+        this.succ1 = new Switch(succ1, this);
+        this.nextSucc = this.succ0;
     }
 
     /**
